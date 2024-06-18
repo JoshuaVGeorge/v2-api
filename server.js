@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
+const calendarRoutes = require("./routes/calendar");
 require("dotenv").config();
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(passport.session());
 
 // Define routes
 app.use("/auth", authRoutes);
+app.use("/calendar", calendarRoutes);
 
 app.get("/", (req, res) => {
 	if (req.isAuthenticated()) {
