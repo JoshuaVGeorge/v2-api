@@ -12,7 +12,7 @@ router.post("/create-event", async (req, res) => {
 	const { summary, description, location, startDateTime, endDateTime } =
 		req.body;
 
-	// Define the hard-coded time zone
+	// Define the hard-coded time zone. MAKE THIS DYNAMIC WITH FRONTEND
 	const timeZone = "America/Los_Angeles";
 
 	const oauth2Client = new google.auth.OAuth2();
