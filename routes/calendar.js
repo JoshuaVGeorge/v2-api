@@ -12,6 +12,9 @@ router.post("/create-event", async (req, res) => {
 	const { summary, description, location, startDateTime, endDateTime } =
 		req.body;
 
+	// Define the hard-coded time zone
+	const timeZone = "America/Los_Angeles";
+
 	const oauth2Client = new google.auth.OAuth2();
 	oauth2Client.setCredentials({
 		access_token: req.user.accessToken,
@@ -27,11 +30,11 @@ router.post("/create-event", async (req, res) => {
 			location: location,
 			start: {
 				dateTime: startDateTime,
-				timeZone: "America/Los_Angeles", // Adjust as needed
+				timeZone: timeZone,
 			},
 			end: {
 				dateTime: endDateTime,
-				timeZone: "America/Los_Angeles", // Adjust as needed
+				timeZone: timeZone,
 			},
 		};
 
