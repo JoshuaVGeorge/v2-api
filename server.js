@@ -6,6 +6,7 @@ const calendarRoutes = require("./routes/calendar");
 require("dotenv").config();
 
 const app = express();
+app.use(express.json());
 
 // Configure session middleware
 app.use(
@@ -29,7 +30,7 @@ app.get("/", (req, res) => {
 		res.send(
 			`Hello ${req.user.profile.displayName} <a href="/auth/logout">Logout</a>`
 		);
-		// console.log("auth User:", req.user.refreshToken);
+		console.log("auth User:", req.user.accessToken);
 	} else {
 		res.send('Hello Guest. <a href="/auth/google">Login with Google</a>');
 	}
