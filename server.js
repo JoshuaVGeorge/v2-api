@@ -2,9 +2,11 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
+const calendarRoutes = require("./routes/calendar");
 require("dotenv").config();
 
 const app = express();
+app.use(express.json());
 
 // Configure session middleware
 app.use(
@@ -12,6 +14,7 @@ app.use(
 		secret: process.env.S_KEY,
 		resave: false,
 		saveUninitialized: true,
+		cookie: { secure: false }, // Set to true if using HTTPS
 	})
 );
 
@@ -21,13 +24,14 @@ app.use(passport.session());
 
 // Define routes
 app.use("/auth", authRoutes);
+app.use("/calendar", calendarRoutes);
 
 app.get("/", (req, res) => {
 	if (req.isAuthenticated()) {
 		res.send(
 			`Hello ${req.user.profile.displayName} <a href="/auth/logout">Logout</a>`
 		);
-		// console.log("auth User:", req.user.refreshToken);
+		// console.log("auth User:", req.user.accessToken);
 	} else {
 		res.send('Hello Guest. <a href="/auth/google">Login with Google</a>');
 	}
