@@ -9,6 +9,7 @@ passport.use(
 			clientSecret: process.env.CLIENT_SECRET,
 			callbackURL: process.env.RE_URI,
 			accessType: "offline",
+			prompt: "consent",
 		},
 		function (accessToken, refreshToken, profile, done) {
 			// console.log("Access Token:", accessToken);
@@ -16,7 +17,7 @@ passport.use(
 			const user = {
 				profile: profile,
 				accessToken: accessToken,
-				refreshToken: refreshToken,
+				refreshToken: refreshToken || null,
 			};
 			done(null, user);
 		}
