@@ -8,7 +8,6 @@ router.post("/create-event", async (req, res) => {
 	if (!req.isAuthenticated()) {
 		return res.status(401).json({ error: "User not authenticated" });
 	}
-
 	const { summary, description, location, startDateTime, endDateTime } =
 		req.body;
 
@@ -37,12 +36,10 @@ router.post("/create-event", async (req, res) => {
 				timeZone: timeZone,
 			},
 		};
-
 		const response = await calendar.events.insert({
 			calendarId: process.env.CAL_ID,
 			resource: event,
 		});
-
 		res.status(200).json(response.data);
 	} catch (error) {
 		console.error("Error creating calendar event:", error);

@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
 		res.send(
 			`Hello ${req.user.profile.displayName} <a href="/auth/logout">Logout</a>`
 		);
-		console.log("auth User:", req.user.accessToken);
+		// console.log("auth User:", req.user.accessToken);
 	} else {
 		res.send('Hello Guest. <a href="/auth/google">Login with Google</a>');
 	}
