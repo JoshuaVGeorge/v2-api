@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const cors = require("cors");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const calendarRoutes = require("./routes/calendar");
@@ -7,6 +8,7 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Configure session middleware
 app.use(
