@@ -8,6 +8,13 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+
+// Use corsOptions when implementing a front end
+// const corsOptions = {
+// 	origin: 'http://your-frontend-domain.com',
+// 	credentials: true
+//   };
+
 app.use(cors());
 
 // Configure session middleware
