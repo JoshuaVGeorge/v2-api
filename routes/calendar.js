@@ -82,4 +82,11 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 		res.status(500).json({ error: "Error setting up calendar watch" });
 	}
 });
+
+router.post("/notifications", async (req, res) => {
+	console.log("Received notification:", req.body);
+	// Process the notification (e.g., retrieve the event details)
+	res.status(200).send("OK");
+});
+
 module.exports = router;
