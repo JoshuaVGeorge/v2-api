@@ -1,8 +1,11 @@
 const express = require("express");
 const { google } = require("googleapis");
+const crypto = require("crypto");
 require("dotenv").config();
 
 const router = express.Router();
+
+const uuid = crypto.randomUUID();
 
 const ensureAuthenticated = (req, res, next) => {
 	if (req.isAuthenticated()) {
@@ -52,4 +55,31 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
 	}
 });
 
+router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
+	const oauth2Client = new google.auth.OAuth2();
+	oauth2Client.setCredentials({
+		access_token: req.user.accessToken,
+		refresh_token: req.user.refreshToken,
+	});
+
+	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+	const requestBody = {
+		id: uuid,
+		type: "webhook",
+		address: CALLBACK_URL,
+	};
+
+	try {
+		const response = await calendar.events.watch({
+			calendarId: "primary",
+			requestBody,
+		});
+
+		res.status(200).json(response.data);
+	} catch (error) {
+		console.error("Error setting up calendar watch:", error);
+		res.status(500).json({ error: "Error setting up calendar watch" });
+	}
+});
 module.exports = router;
