@@ -4,10 +4,15 @@ require("dotenv").config();
 
 const router = express.Router();
 
-router.post("/create-event", async (req, res) => {
-	if (!req.isAuthenticated()) {
-		return res.status(401).json({ error: "User not authenticated" });
+const ensureAuthenticated = (req, res, next) => {
+	if (req.isAuthenticated()) {
+		return next();
+	} else {
+		res.status(401).json({ error: "User not authenticated" });
 	}
+};
+
+router.post("/create-event", ensureAuthenticated, async (req, res) => {
 	const { summary, description, location, startDateTime, endDateTime } =
 		req.body;
 
