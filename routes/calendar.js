@@ -67,7 +67,7 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 	const requestBody = {
 		id: uuid,
 		type: "webhook",
-		address: CALLBACK_URL,
+		address: "http://localhost:5000/calendar/notifications",
 	};
 
 	try {
