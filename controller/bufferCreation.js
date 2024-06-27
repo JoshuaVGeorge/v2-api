@@ -1,4 +1,5 @@
 const { google } = require("googleapis");
+const { calcTime } = require("./distanceCalculator");
 require("dotenv").config();
 
 const bufferCreation = async (event, oauth2Client) => {
