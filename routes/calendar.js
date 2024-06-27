@@ -52,7 +52,7 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
 		});
 
 		if (location) {
-			bufferCreation(event);
+			bufferCreation(event, oauth2Client);
 		}
 
 		res.status(200).json(response.data);
