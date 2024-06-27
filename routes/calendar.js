@@ -79,7 +79,7 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 
 	try {
 		const response = await calendar.events.watch({
-			calendarId: "primary",
+			calendarId: process.env.CAL_ID,
 			requestBody,
 		});
 
