@@ -2,6 +2,7 @@ const express = require("express");
 const { google } = require("googleapis");
 const crypto = require("crypto");
 require("dotenv").config();
+const { bufferCreation } = require("../controller/bufferCreation");
 
 const router = express.Router();
 
@@ -44,10 +45,16 @@ router.post("/create-event", ensureAuthenticated, async (req, res) => {
 				timeZone: timeZone,
 			},
 		};
+
 		const response = await calendar.events.insert({
 			calendarId: process.env.CAL_ID,
 			resource: event,
 		});
+
+		if (location) {
+			bufferCreation(event);
+		}
+
 		res.status(200).json(response.data);
 	} catch (error) {
 		console.error("Error creating calendar event:", error);
