@@ -5,6 +5,15 @@ require("dotenv").config();
 const bufferCreation = async (event, oauth2Client) => {
 	console.log(`Event created with location: ${event.location}`);
 
+	const homeLocation = "6055, Balsam Street , Vancouver , BC "; // Replace with your hardcoded home location
+	const eventLocation = event.location;
+
+	// Calculate driving time from home to event location
+	const drivingTime = await calcTime(homeLocation, eventLocation);
+	if (drivingTime) {
+		console.log(`Driving time to event: ${drivingTime}`);
+	}
+
 	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
 	// Calculate the start and end times for the buffer events
