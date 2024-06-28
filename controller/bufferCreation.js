@@ -8,8 +8,16 @@ const bufferCreation = async (event, oauth2Client) => {
 	const homeLocation = "6055, Balsam Street , Vancouver , BC "; // Replace with your hardcoded home location
 	const eventLocation = event.location;
 
+	const departureTime = Math.floor(
+		new Date(event.start.dateTime).getTime() / 1000
+	);
+
 	// Calculate driving time from home to event location
-	const drivingTime = await calcTime(homeLocation, eventLocation);
+	const drivingTime = await calcTime(
+		homeLocation,
+		eventLocation,
+		departureTime
+	);
 	if (drivingTime) {
 		console.log(`Driving time to event: ${drivingTime}`);
 	}
