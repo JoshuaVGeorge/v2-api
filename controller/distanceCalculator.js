@@ -10,6 +10,7 @@ const calcTime = async (homeLocation, eventLocation) => {
 				origins: [homeLocation],
 				destinations: [eventLocation],
 				mode: "driving",
+				departure_time: "now",
 				key: process.env.MAPS_API_KEY,
 			},
 		});
