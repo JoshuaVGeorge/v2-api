@@ -3,14 +3,14 @@ require("dotenv").config();
 
 const client = new Client({});
 
-const calcTime = async (homeLocation, eventLocation) => {
+const calcTime = async (homeLocation, eventLocation, departureTime) => {
 	try {
 		const response = await client.distancematrix({
 			params: {
 				origins: [homeLocation],
 				destinations: [eventLocation],
 				mode: "driving",
-				departure_time: "now",
+				departure_time: departureTime,
 				key: process.env.MAPS_API_KEY,
 			},
 		});
