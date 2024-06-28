@@ -18,9 +18,13 @@ const bufferCreation = async (event, oauth2Client) => {
 		eventLocation,
 		departureTime
 	);
-	if (drivingTime) {
-		console.log(`Driving time to event: ${drivingTime}`);
+	if (drivingTime === null) {
+		console.error("Failed to calculate driving time.");
+		return;
 	}
+
+	const driveInMins = drivingTime / 60;
+	console.log(`Driving time to event: ${driveInMins} mins`);
 
 	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
@@ -28,11 +32,13 @@ const bufferCreation = async (event, oauth2Client) => {
 	const primaryStart = new Date(event.start.dateTime);
 	const primaryEnd = new Date(event.end.dateTime);
 
-	const bufferStartBefore = new Date(primaryStart.getTime() - 10 * 60000);
+	const bufferStartBefore = new Date(
+		primaryStart.getTime() - drivingTime * 1000
+	);
 	const bufferEndBefore = primaryStart;
 
 	const bufferStartAfter = primaryEnd;
-	const bufferEndAfter = new Date(primaryEnd.getTime() + 10 * 60000);
+	const bufferEndAfter = new Date(primaryEnd.getTime() + drivingTime * 1000);
 
 	try {
 		// Create the before event

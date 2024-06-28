@@ -17,9 +17,13 @@ const calcTime = async (homeLocation, eventLocation, departureTime) => {
 
 		const result = response.data.rows[0].elements[0];
 		if (result.status === "OK") {
-			const duration = result.duration.text;
-			console.log(`Driving time from home to event: ${duration}`);
-			return duration;
+			const durationInSeconds = result.duration_in_traffic
+				? result.duration_in_traffic.value
+				: result.duration.value;
+			console.log(
+				`Driving time from home to event (with traffic): ${durationInSeconds} seconds`
+			);
+			return durationInSeconds;
 		} else {
 			console.error("Error calculating driving time:", result.status);
 			return null;
