@@ -3,18 +3,11 @@ const { google } = require("googleapis");
 const crypto = require("crypto");
 require("dotenv").config();
 const { bufferCreation } = require("../controller/bufferCreation");
+const { ensureAuthenticated } = require("../controller/authController");
 
 const router = express.Router();
 
 const uuid = crypto.randomUUID();
-
-const ensureAuthenticated = (req, res, next) => {
-	if (req.isAuthenticated()) {
-		return next();
-	} else {
-		res.status(401).json({ error: "User not authenticated" });
-	}
-};
 
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
 	const { summary, description, location, startDateTime, endDateTime } =
