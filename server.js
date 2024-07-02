@@ -4,6 +4,7 @@ const cors = require("cors");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const calendarRoutes = require("./routes/calendar");
+const notificationRoutes = require("./routes/notifications");
 require("dotenv").config();
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(passport.session());
 // Define routes
 app.use("/auth", authRoutes);
 app.use("/calendar", calendarRoutes);
+app.use("/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
 	if (req.isAuthenticated()) {
