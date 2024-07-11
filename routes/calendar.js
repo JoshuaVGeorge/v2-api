@@ -10,11 +10,14 @@ const router = express.Router();
 const uuid = crypto.randomUUID();
 
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
-	const { summary, description, location, startDateTime, endDateTime } =
-		req.body;
-
-	// Define the hard-coded time zone. MAKE THIS DYNAMIC WITH FRONTEND
-	const timeZone = "America/Los_Angeles";
+	const {
+		summary,
+		description,
+		location,
+		startDateTime,
+		endDateTime,
+		timeZone,
+	} = req.body;
 
 	const oauth2Client = new google.auth.OAuth2();
 	oauth2Client.setCredentials({
