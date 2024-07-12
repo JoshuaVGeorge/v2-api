@@ -4,18 +4,18 @@ const cors = require("cors");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const calendarRoutes = require("./routes/calendar");
+const notificationRoutes = require("./routes/notifications");
 require("dotenv").config();
 
 const app = express();
 app.use(express.json());
 
-// Use corsOptions when implementing a front end
-// const corsOptions = {
-// 	origin: 'http://your-frontend-domain.com',
-// 	credentials: true
-//   };
-
-app.use(cors());
+app.use(
+	cors({
+		origin: "http://localhost:3000", // React app URL
+		credentials: true,
+	})
+);
 
 // Configure session middleware
 app.use(
@@ -34,15 +34,25 @@ app.use(passport.session());
 // Define routes
 app.use("/auth", authRoutes);
 app.use("/calendar", calendarRoutes);
+app.use("/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
+	res.send("Backend is running");
+	// if (req.isAuthenticated()) {
+	// 	res.send(
+	// 		`Hello ${req.user.profile.displayName} <a href="/auth/logout">Logout</a>`
+	// 	);
+	// 	// console.log("auth User:", req.user.accessToken);
+	// } else {
+	// 	res.send('Hello Guest. <a href="/auth/google">Login with Google</a>');
+	// }
+});
+
+app.get("/user", (req, res) => {
 	if (req.isAuthenticated()) {
-		res.send(
-			`Hello ${req.user.profile.displayName} <a href="/auth/logout">Logout</a>`
-		);
-		// console.log("auth User:", req.user.accessToken);
+		res.json(req.user);
 	} else {
-		res.send('Hello Guest. <a href="/auth/google">Login with Google</a>');
+		res.status(401).json({ error: "User not authenticated" });
 	}
 });
 

@@ -3,25 +3,21 @@ const { google } = require("googleapis");
 const crypto = require("crypto");
 require("dotenv").config();
 const { bufferCreation } = require("../controller/bufferCreation");
+const { ensureAuthenticated } = require("../controller/authController");
 
 const router = express.Router();
 
 const uuid = crypto.randomUUID();
 
-const ensureAuthenticated = (req, res, next) => {
-	if (req.isAuthenticated()) {
-		return next();
-	} else {
-		res.status(401).json({ error: "User not authenticated" });
-	}
-};
-
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
-	const { summary, description, location, startDateTime, endDateTime } =
-		req.body;
-
-	// Define the hard-coded time zone. MAKE THIS DYNAMIC WITH FRONTEND
-	const timeZone = "America/Los_Angeles";
+	const {
+		summary,
+		description,
+		location,
+		startDateTime,
+		endDateTime,
+		timeZone,
+	} = req.body;
 
 	const oauth2Client = new google.auth.OAuth2();
 	oauth2Client.setCredentials({
@@ -74,7 +70,7 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 	const requestBody = {
 		id: uuid,
 		type: "webhook",
-		address: "http://localhost:5000/calendar/notifications",
+		address: "http://localhost:5000/notifications",
 	};
 
 	try {
@@ -88,12 +84,6 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 		console.error("Error setting up calendar watch:", error);
 		res.status(500).json({ error: "Error setting up calendar watch" });
 	}
-});
-
-router.post("/notifications", async (req, res) => {
-	console.log("Received notification:", req.body);
-	// Process the notification (e.g., retrieve the event details)
-	res.status(200).send("OK");
 });
 
 module.exports = router;
