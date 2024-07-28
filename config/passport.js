@@ -26,6 +26,7 @@ passport.use(
 
 passport.serializeUser((user, done) => {
 	console.log("serializeUser:", user.refreshToken);
+	console.log(req.user);
 	done(null, user);
 });
 
