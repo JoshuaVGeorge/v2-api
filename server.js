@@ -49,11 +49,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-	if (req.isAuthenticated()) {
-		res.json(req.user);
-	} else {
-		res.status(401).json({ error: "User not authenticated" });
-	}
+	console.log(req.user);
+	// if (req.isAuthenticated()) {
+	// 	res.json(req.user);
+	// } else {
+	// 	res.status(401).json({ error: "User not authenticated" });
+	// }
 });
 
 const PORT = process.env.PORT || 5000;
