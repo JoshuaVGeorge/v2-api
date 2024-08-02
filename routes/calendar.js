@@ -23,12 +23,12 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 	timeMax.setDate(now.getDate() + 7);
 
 	try {
-		const events = await calendar.events.list({
+		// Prepare the request parameters
+		const params = {
 			calendarId: process.env.CAL_ID,
-			timeMin: now.toISOString(),
-			timeMax: timeMax.toISOString(),
 			singleEvents: true,
-		});
+			showDeleted: false, // Ensure we don't retrieve deleted events
+		};
 
 		const { items, nextSyncToken } = events.data;
 
