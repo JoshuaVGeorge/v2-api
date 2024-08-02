@@ -9,6 +9,35 @@ const router = express.Router();
 
 const uuid = crypto.randomUUID();
 
+router.get("/events", ensureAuthenticated, async (req, res) => {
+	const oauth2Client = new google.auth.OAuth2();
+	oauth2Client.setCredentials({
+		access_token: req.user.accessToken,
+		refresh_token: req.user.refreshToken,
+	});
+
+	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+	const now = new Date();
+	const timeMax = new Date(now);
+	timeMax.setDate(now.getDate() + 7);
+
+	try {
+		const events = await calendar.events.list({
+			calendarId: "primary",
+			timeMin: now.toISOString(),
+			timeMax: timeMax.toISOString(),
+			singleEvents: true,
+			orderBy: "startTime",
+		});
+
+		res.status(200).json(events.data.items);
+	} catch (error) {
+		console.error("Error retrieving calendar events:", error);
+		res.status(500).json({ error: "Error retrieving calendar events" });
+	}
+});
+
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
 	const {
 		summary,
