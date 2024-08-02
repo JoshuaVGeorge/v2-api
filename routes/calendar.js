@@ -28,7 +28,6 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 			timeMin: now.toISOString(),
 			timeMax: timeMax.toISOString(),
 			singleEvents: true,
-			orderBy: "startTime",
 		});
 
 		const { items, nextSyncToken } = events.data;
