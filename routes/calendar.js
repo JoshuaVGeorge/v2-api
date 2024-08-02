@@ -30,7 +30,6 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 		const params = {
 			calendarId: process.env.CAL_ID,
 			singleEvents: true,
-			showDeleted: false, // Ensure we don't retrieve deleted events
 		};
 
 		if (storedSyncToken) {
