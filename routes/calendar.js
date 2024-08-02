@@ -43,7 +43,10 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 		const events = await calendar.events.list(params);
 		const { items, nextSyncToken } = events.data;
 
-		console.log("Next Sync Token:", nextSyncToken);
+		if (nextSyncToken) {
+			storedSyncToken = nextSyncToken;
+			console.log("Next Sync Token:", nextSyncToken);
+		}
 
 		res.status(200).json(items);
 	} catch (error) {
