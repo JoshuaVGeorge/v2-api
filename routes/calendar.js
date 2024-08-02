@@ -9,6 +9,9 @@ const router = express.Router();
 
 const uuid = crypto.randomUUID();
 
+// Placeholder for storing sync tokens (in production, use a database or persistent storage)
+let storedSyncToken = null;
+
 router.get("/events", ensureAuthenticated, async (req, res) => {
 	const oauth2Client = new google.auth.OAuth2();
 	oauth2Client.setCredentials({
