@@ -50,7 +50,13 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 
 		res.status(200).json(items);
 	} catch (error) {
-		console.error("Error retrieving calendar events:", error);
+		if (error.code === 410) {
+			// Invalid sync token, needs a full sync
+			storedSyncToken = null;
+			console.error("Sync token expired, resetting sync token.");
+		} else {
+			console.error("Error retrieving calendar events:", error);
+		}
 		res.status(500).json({ error: "Error retrieving calendar events" });
 	}
 });
