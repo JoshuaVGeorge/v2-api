@@ -24,7 +24,7 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 
 	try {
 		const events = await calendar.events.list({
-			calendarId: "primary",
+			calendarId: process.env.CAL_ID,
 			timeMin: now.toISOString(),
 			timeMax: timeMax.toISOString(),
 			singleEvents: true,
