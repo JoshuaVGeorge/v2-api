@@ -30,6 +30,17 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 			showDeleted: false, // Ensure we don't retrieve deleted events
 		};
 
+		if (storedSyncToken) {
+			params.syncToken = storedSyncToken;
+		} else {
+			const now = new Date();
+			const timeMax = new Date(now);
+			timeMax.setDate(now.getDate() + 7);
+			params.timeMin = now.toISOString();
+			params.timeMax = timeMax.toISOString();
+		}
+
+		const events = await calendar.events.list(params);
 		const { items, nextSyncToken } = events.data;
 
 		console.log("Next Sync Token:", nextSyncToken);
