@@ -31,7 +31,11 @@ router.get("/events", ensureAuthenticated, async (req, res) => {
 			orderBy: "startTime",
 		});
 
-		res.status(200).json(events.data.items);
+		const { items, nextSyncToken } = events.data;
+
+		console.log("Next Sync Token:", nextSyncToken);
+
+		res.status(200).json(items);
 	} catch (error) {
 		console.error("Error retrieving calendar events:", error);
 		res.status(500).json({ error: "Error retrieving calendar events" });
