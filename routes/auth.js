@@ -34,7 +34,7 @@ router.get("/logout", (req, res, next) => {
 			if (err) {
 				return next(err);
 			}
-			res.redirect("/");
+			res.redirect("http://localhost:3000/login");
 		});
 	});
 });
