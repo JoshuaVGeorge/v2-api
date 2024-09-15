@@ -12,8 +12,8 @@ passport.use(
 			prompt: "consent",
 		},
 		function (accessToken, refreshToken, profile, done) {
-			console.log("Access Token:", accessToken);
-			console.log("Refresh Token:", refreshToken);
+			// console.log("Access Token:", accessToken);
+			// console.log("Refresh Token:", refreshToken);
 			const user = {
 				profile: profile,
 				accessToken: accessToken,
@@ -25,7 +25,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-	console.log("serializeUser:", user);
+	// console.log("serializeUser:", user);
 	done(null, user);
 });
 
