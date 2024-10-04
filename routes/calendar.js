@@ -9,6 +9,60 @@ const router = express.Router();
 
 const uuid = crypto.randomUUID();
 
+// Placeholder for storing sync tokens (in production, use a database or persistent storage)
+let storedSyncToken = null;
+
+router.get("/events", ensureAuthenticated, async (req, res) => {
+	const oauth2Client = new google.auth.OAuth2();
+	oauth2Client.setCredentials({
+		access_token: req.user.accessToken,
+		refresh_token: req.user.refreshToken,
+	});
+
+	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+	const now = new Date();
+	const timeMax = new Date(now);
+	timeMax.setDate(now.getDate() + 7);
+
+	try {
+		// Prepare the request parameters
+		const params = {
+			calendarId: process.env.CAL_ID,
+			singleEvents: true,
+		};
+
+		if (storedSyncToken) {
+			params.syncToken = storedSyncToken;
+		} else {
+			const now = new Date();
+			const timeMax = new Date(now);
+			timeMax.setDate(now.getDate() + 7);
+			params.timeMin = now.toISOString();
+			params.timeMax = timeMax.toISOString();
+		}
+
+		const events = await calendar.events.list(params);
+		const { items, nextSyncToken } = events.data;
+
+		if (nextSyncToken) {
+			storedSyncToken = nextSyncToken;
+			console.log("Next Sync Token:", nextSyncToken);
+		}
+
+		res.status(200).json(items);
+	} catch (error) {
+		if (error.code === 410) {
+			// Invalid sync token, needs a full sync
+			storedSyncToken = null;
+			console.error("Sync token expired, resetting sync token.");
+		} else {
+			console.error("Error retrieving calendar events:", error);
+		}
+		res.status(500).json({ error: "Error retrieving calendar events" });
+	}
+});
+
 router.post("/create-event", ensureAuthenticated, async (req, res) => {
 	const {
 		summary,
