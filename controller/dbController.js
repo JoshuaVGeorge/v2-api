@@ -4,18 +4,20 @@ require("dotenv").config();
 const SUPABASE_URL = process.env.SUPA_URL;
 const SUPABASE_ANON_KEY = process.env.SUPA_KEY;
 
-const supabase = createClient(SUPA_URL, SUPA_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const addUser = async (id, email) => {
+const addUser = async (req, res) => {
+	const { id, email } = req.body;
+
 	const { data, error } = await supabase
-		.from("user_information") // Specify the table name
-		.insert([
-			{ user_id: id, user_email: email }, // Insert user data
-		]);
+		.from("user_information")
+		.insert([{ user_id: id, user_email: email }]);
 
 	if (error) {
 		console.error("Error adding user:", error);
 		return { success: false, error };
+	} else {
+		console.log(`user: ${id} added`);
 	}
 
 	return { success: true, data };
