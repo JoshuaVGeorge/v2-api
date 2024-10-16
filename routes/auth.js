@@ -1,5 +1,6 @@
 const express = require("express");
 const passport = require("passport");
+const dbController = require("../controller/dbController");
 
 const router = express.Router();
 
@@ -37,5 +38,7 @@ router.get("/logout", (req, res, next) => {
 		});
 	});
 });
+
+router.route("/new").post(dbController.addUser);
 
 module.exports = router;
