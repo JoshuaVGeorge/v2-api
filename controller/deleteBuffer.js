@@ -1,3 +1,3 @@
-const deleteEventsWithKeyPhrase = async (keyPhrase, calendarClient) => {};
+const deleteAll = async (keyPhrase, calendarClient) => {};
 
-module.exports = { deleteEventsWithKeyPhrase };
+module.exports = { deleteAll };
