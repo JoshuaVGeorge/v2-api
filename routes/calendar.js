@@ -4,6 +4,7 @@ const crypto = require("crypto");
 require("dotenv").config();
 const { bufferCreation } = require("../controller/bufferCreation");
 const { ensureAuthenticated } = require("../controller/authController");
+const { deleteAll } = require("../controller/deleteBuffer");
 
 const router = express.Router();
 
@@ -148,6 +149,8 @@ router.delete("/delete-events", ensureAuthenticated, async (req, res) => {
 	});
 
 	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+	const result = await deleteAll(calendar);
 });
 
 module.exports = router;
