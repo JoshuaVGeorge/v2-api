@@ -151,6 +151,12 @@ router.delete("/delete-events", ensureAuthenticated, async (req, res) => {
 	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
 	const result = await deleteAll(calendar);
+
+	if (!result.success) {
+		return res.status(500).json({ error: result.error.message });
+	}
+
+	res.status(200).json({ message: result.message });
 });
 
 module.exports = router;
