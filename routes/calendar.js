@@ -142,7 +142,12 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 });
 
 router.delete("/delete-events", ensureAuthenticated, async (req, res) => {
-	const result = await deleteAll();
+	const oauth2Client = new google.auth.OAuth2();
+	oauth2Client.setCredentials({
+		access_token: req.user.accessToken,
+		refresh_token: req.user.refreshToken,
+	});
+	const result = await deleteAll(oauth2Client);
 
 	if (!result.success) {
 		return res.status(500).json({ error: result.error.message });
