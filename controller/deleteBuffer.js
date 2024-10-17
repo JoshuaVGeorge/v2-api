@@ -1,15 +1,9 @@
 const { google } = require("googleapis");
 require("dotenv").config();
 
-const deleteAll = async () => {
-	const oauth2Client = new google.auth.OAuth2();
-	oauth2Client.setCredentials({
-		access_token: req.user.accessToken,
-		refresh_token: req.user.refreshToken,
-	});
-
+const deleteAll = async (oauth2Client) => {
 	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
-	const keyPhrase = "#shedular";
+	const keyPhrase = "#schedulr";
 
 	try {
 		const now = new Date().toISOString();
