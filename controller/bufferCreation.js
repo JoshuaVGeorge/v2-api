@@ -43,7 +43,7 @@ const bufferCreation = async (event, oauth2Client) => {
 	try {
 		// Create the before event
 		const beforeEvent = {
-			summary: "Buffer Time Before",
+			summary: "Buffer Time Before #schedulr",
 			description: "Buffer time before the main event",
 			location: event.location,
 			start: {
@@ -64,7 +64,7 @@ const bufferCreation = async (event, oauth2Client) => {
 		// Create the after event
 		const afterEvent = {
 			summary: "Buffer Time After",
-			description: "Buffer time after the main event",
+			description: "#schedulr Buffer time after the main event",
 			location: event.location,
 			start: {
 				dateTime: bufferStartAfter.toISOString(),
