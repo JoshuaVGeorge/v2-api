@@ -4,6 +4,7 @@ const crypto = require("crypto");
 require("dotenv").config();
 const { bufferCreation } = require("../controller/bufferCreation");
 const { ensureAuthenticated } = require("../controller/authController");
+const { deleteAll } = require("../controller/deleteBuffer");
 
 const router = express.Router();
 
@@ -138,6 +139,21 @@ router.post("/watch-calendar", ensureAuthenticated, async (req, res) => {
 		console.error("Error setting up calendar watch:", error);
 		res.status(500).json({ error: "Error setting up calendar watch" });
 	}
+});
+
+router.delete("/delete-events", ensureAuthenticated, async (req, res) => {
+	const oauth2Client = new google.auth.OAuth2();
+	oauth2Client.setCredentials({
+		access_token: req.user.accessToken,
+		refresh_token: req.user.refreshToken,
+	});
+	const result = await deleteAll(oauth2Client);
+
+	if (!result.success) {
+		return res.status(500).json({ error: result.error.message });
+	}
+
+	res.status(200).json({ message: result.message });
 });
 
 module.exports = router;
