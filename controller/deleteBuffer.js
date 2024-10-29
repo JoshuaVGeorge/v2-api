@@ -17,13 +17,11 @@ const deleteAll = async (oauth2Client) => {
 		const events = eventsResponse.data.items;
 		console.log(`Found ${events.length} events.`);
 
-		// Iterate through events and delete those with the key phrase in the summary or description
 		for (const event of events) {
 			if (
 				(event.summary && event.summary.includes(keyPhrase)) ||
 				(event.description && event.description.includes(keyPhrase))
 			) {
-				// Delete the event
 				await calendar.events.delete({
 					calendarId: process.env.CAL_ID,
 					eventId: event.id,
@@ -36,7 +34,7 @@ const deleteAll = async (oauth2Client) => {
 
 		return {
 			success: true,
-			message: `Events with key phrase "${keyPhrase}" deleted.`,
+			message: `${events.length} events successfully deleted`,
 		};
 	} catch (error) {
 		console.error("Error fetching or deleting events:", error);
