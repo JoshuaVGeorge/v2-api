@@ -24,13 +24,13 @@ passport.use(
 	)
 );
 
-passport.serializeUser((user, done) => {
-	// console.log("serializeUser:", user);
-	done(null, user);
-});
+// passport.serializeUser((user, done) => {
+// 	// console.log("serializeUser:", user);
+// 	done(null, user);
+// });
 
-passport.deserializeUser((user, done) => {
-	done(null, user);
-});
+// passport.deserializeUser((user, done) => {
+// 	done(null, user);
+// });
 
 module.exports = passport;
