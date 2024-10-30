@@ -5,6 +5,7 @@ const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const calendarRoutes = require("./routes/calendar");
 const notificationRoutes = require("./routes/notifications");
+const SupabaseStore = require("./config/supabaseStore");
 require("dotenv").config();
 
 const app = express();
@@ -20,10 +21,12 @@ app.use(
 // Configure session middleware
 app.use(
 	session({
+		store: new SupabaseStore(),
 		secret: process.env.S_KEY,
 		resave: false,
-		saveUninitialized: true,
-		cookie: { secure: false }, // Set to true if using HTTPS
+		saveUninitialized: false,
+		rolling: true,
+		cookie: { maxAge: 72 * 60 * 60 * 1000 }, // Set to true if using HTTPS
 	})
 );
 
