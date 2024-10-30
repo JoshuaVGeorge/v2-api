@@ -61,6 +61,4 @@ class SupabaseStore extends session.Store {
 	}
 }
 
-module.exports = {
-	SupabaseStore,
-};
+module.exports = SupabaseStore;
