@@ -41,6 +41,20 @@ class SupabaseStore extends session.Store {
 			callback(err);
 		}
 	}
+
+	async destroy(sessionId, callback) {
+		try {
+			const { error } = await supabase
+				.from("session_information")
+				.delete()
+				.eq("session_id", sessionId);
+
+			if (error) return callback(error);
+			callback(null);
+		} catch (err) {
+			callback(err);
+		}
+	}
 }
 
 export default SupabaseStore;
