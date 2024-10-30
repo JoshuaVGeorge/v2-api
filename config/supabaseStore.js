@@ -20,7 +20,7 @@ class SupabaseStore extends session.Store {
 			if (error) {
 				console.error(
 					`Error retrieving session data for sessionId ${sessionId}:`,
-					error
+					JSON.stringify(error, null, 2)
 				);
 				return callback(error, null);
 			}
@@ -36,7 +36,7 @@ class SupabaseStore extends session.Store {
 		} catch (err) {
 			console.error(
 				`Unexpected error in get method for sessionId ${sessionId}:`,
-				err
+				JSON.stringify(err, null, 2)
 			);
 			callback(err, null);
 		}
@@ -52,18 +52,26 @@ class SupabaseStore extends session.Store {
 				`Attempting to set session data for sessionId: ${sessionId}, userId: ${userId}`
 			);
 
-			const { data, error } = await supabase
-				.from("session_information")
-				.upsert({
+			if (!userId) {
+				console.warn(
+					"No userId found in sessionData. Cannot proceed with setting session."
+				);
+				return callback(new Error("User ID is required in sessionData"), null);
+			}
+
+			const { data, error } = await supabase.from("session_information").upsert(
+				{
 					session_id: sessionId,
 					user_id: userId,
 					session_expiry: expires,
-				});
+				},
+				{ onConflict: "user_id" }
+			);
 
 			if (error) {
 				console.error(
 					`Error setting session data for sessionId ${sessionId}:`,
-					error
+					JSON.stringify(error, null, 2)
 				);
 				return callback(error);
 			}
@@ -73,7 +81,7 @@ class SupabaseStore extends session.Store {
 		} catch (err) {
 			console.error(
 				`Unexpected error in set method for sessionId ${sessionId}:`,
-				err
+				JSON.stringify(err, null, 2)
 			);
 			callback(err);
 		}
@@ -92,7 +100,7 @@ class SupabaseStore extends session.Store {
 			if (error) {
 				console.error(
 					`Error destroying session data for sessionId ${sessionId}:`,
-					error
+					JSON.stringify(error, null, 2)
 				);
 				return callback(error);
 			}
@@ -104,7 +112,7 @@ class SupabaseStore extends session.Store {
 		} catch (err) {
 			console.error(
 				`Unexpected error in destroy method for sessionId ${sessionId}:`,
-				err
+				JSON.stringify(err, null, 2)
 			);
 			callback(err);
 		}
