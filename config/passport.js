@@ -11,26 +11,22 @@ passport.use(
 			accessType: "offline",
 			prompt: "consent",
 		},
-		function (accessToken, refreshToken, profile, done) {
-			// console.log("Access Token:", accessToken);
-			// console.log("Refresh Token:", refreshToken);
-			const user = {
-				profile: profile,
-				accessToken: accessToken,
-				refreshToken: refreshToken || null,
-			};
-			done(null, user);
+		(accessToken, refreshToken, profile, done) => {
+			// need to save rest of user data to DB
+
+			const userId = profile.id;
+			return done(null, { userID });
 		}
 	)
 );
 
-// passport.serializeUser((user, done) => {
-// 	// console.log("serializeUser:", user);
-// 	done(null, user);
-// });
+passport.serializeUser((user, done) => {
+	// console.log("serializeUser:", user);
+	done(null, user.userID);
+});
 
-// passport.deserializeUser((user, done) => {
-// 	done(null, user);
-// });
+passport.deserializeUser((user, done) => {
+	done(null, user);
+});
 
 module.exports = passport;
