@@ -20,6 +20,27 @@ class SupabaseStore extends session.Store {
 			callback(err, null);
 		}
 	}
+
+	async set(sessionId, sessionData, callback) {
+		try {
+			const userId = sessionData.userId;
+			const expire = sessionData.cookie.expires
+				? new Date(sessionData.cookie.expires)
+				: null;
+			const { data, error } = await supabase
+				.from("session_information")
+				.upsert({
+					session_id: sessionId,
+					user_id: userId,
+					session_expiry: expire,
+				});
+
+			if (error) return callback(error);
+			callback(null, data);
+		} catch (err) {
+			callback(err);
+		}
+	}
 }
 
 export default SupabaseStore;
