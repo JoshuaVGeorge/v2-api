@@ -27,15 +27,23 @@ router.get(
 	}
 );
 
-router.get("/logout", (req, res, next) => {
+router.get("/logout", (req, res) => {
+	// Use Passport's built-in logout method
 	req.logout((err) => {
 		if (err) {
-			return next(err);
+			console.error("Error during logout:", err);
+			return res.status(500).send("Error logging out");
 		}
+
 		req.session.destroy((err) => {
 			if (err) {
-				return next(err);
+				console.error("Error destroying session:", err);
+				return res.status(500).send("Error destroying session");
 			}
+
+			// Successfully logged out, redirect or respond
+			res.clearCookie("connect.sid");
+			res.send("Logged out successfully");
 		});
 	});
 });
