@@ -10,88 +10,75 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 class SupabaseStore extends session.Store {
 	async get(sessionId, callback) {
 		try {
-			console.log(`Attempting to get session data for sessionId: ${sessionId}`);
+			// console.log(`Fetching session data for sessionId: ${sessionId}`);
 			const { data, error } = await supabase
 				.from("session_information")
-				.select("user_id")
+				.select("session_data")
 				.eq("session_id", sessionId)
 				.single();
 
 			if (error) {
-				console.error(
-					`Error retrieving session data for sessionId ${sessionId}:`,
-					JSON.stringify(error, null, 2)
-				);
+				console.error("Error fetching session data from Supabase:", error);
 				return callback(error, null);
 			}
+
 			if (!data) {
 				console.warn(`No session data found for sessionId: ${sessionId}`);
 				return callback(null, null);
 			}
 
-			console.log(
-				`Successfully retrieved session data for sessionId: ${sessionId}`
-			);
-			callback(null, data.data);
+			// console.log(
+			// 	"Session data successfully retrieved from Supabase:",
+			// 	data.session_data
+			// );
+			// Make sure to return the actual session data
+			callback(null, data.session_data); // This should be the correct structure
 		} catch (err) {
-			console.error(
-				`Unexpected error in get method for sessionId ${sessionId}:`,
-				JSON.stringify(err, null, 2)
-			);
+			console.error("Unexpected error in SupabaseStore get method:", err);
 			callback(err, null);
 		}
 	}
 
 	async set(sessionId, sessionData, callback) {
 		try {
-			const userId = sessionData.passport.user || null;
+			// Ensure sessionData includes the correct format
+			const sessionToStore = {
+				...sessionData,
+				passport: sessionData.passport, // Ensure the passport object is included
+			};
+
 			const expires = sessionData.cookie.expires
 				? new Date(sessionData.cookie.expires)
 				: null;
-			console.log(
-				`Attempting to set session data for sessionId: ${sessionId}, userId: ${userId}`
-			);
 
-			if (!userId) {
-				console.warn(
-					"No userId found in sessionData. Cannot proceed with setting session."
-				);
-				return callback(new Error("User ID is required in sessionData"), null);
-			}
-
-			const { data, error } = await supabase.from("session_information").upsert(
+			const { error } = await supabase.from("session_information").upsert(
 				{
 					session_id: sessionId,
-					user_id: userId,
+					session_data: sessionToStore, // Save the complete session data
 					session_expiry: expires,
+					user_id: sessionData.passport.user,
 				},
-				{ onConflict: "user_id" }
+				{ onConflict: "session_id" }
 			);
 
 			if (error) {
-				console.error(
-					`Error setting session data for sessionId ${sessionId}:`,
-					JSON.stringify(error, null, 2)
-				);
+				console.error("Error saving session data to Supabase:", error);
 				return callback(error);
 			}
 
-			console.log(`Successfully set session data for sessionId: ${sessionId}`);
-			callback(null, data);
+			// console.log("Session data successfully saved to Supabase");
+			callback(null);
 		} catch (err) {
-			console.error(
-				`Unexpected error in set method for sessionId ${sessionId}:`,
-				JSON.stringify(err, null, 2)
-			);
+			console.error("Unexpected error in SupabaseStore set method:", err);
 			callback(err);
 		}
 	}
 
 	async destroy(sessionId, callback) {
 		try {
-			console.log(
-				`Attempting to destroy session data for sessionId: ${sessionId}`
-			);
+			// console.log(
+			// 	`Attempting to destroy session data for sessionId: ${sessionId}`
+			// );
 			const { error } = await supabase
 				.from("session_information")
 				.delete()
@@ -105,9 +92,9 @@ class SupabaseStore extends session.Store {
 				return callback(error);
 			}
 
-			console.log(
-				`Successfully destroyed session data for sessionId: ${sessionId}`
-			);
+			// console.log(
+			// 	`Successfully destroyed session data for sessionId: ${sessionId}`
+			// );
 			callback(null);
 		} catch (err) {
 			console.error(

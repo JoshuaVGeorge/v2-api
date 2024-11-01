@@ -26,7 +26,11 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		rolling: true,
-		cookie: { maxAge: 72 * 60 * 60 * 1000 }, // Set to true if using HTTPS
+		cookie: {
+			httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+			secure: process.env.NODE_ENV === "production", // Use true in production (requires HTTPS)
+			maxAge: 24 * 60 * 60 * 1000, // 1-day expiration
+		},
 	})
 );
 
@@ -41,21 +45,15 @@ app.use("/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
 	res.send("Backend is running");
-	// if (req.isAuthenticated()) {
-	// 	res.send(
-	// 		`Hello ${req.user.profile.displayName} <a href="/auth/logout">Logout</a>`
-	// 	);
-	// 	// console.log("auth User:", req.user.accessToken);
-	// } else {
-	// 	res.send('Hello Guest. <a href="/auth/google">Login with Google</a>');
-	// }
 });
 
 app.get("/user", (req, res) => {
 	if (req.isAuthenticated()) {
-		res.json(req.user);
+		res.json({ authenticated: true, user: req.user });
 	} else {
-		res.status(401).json({ error: "User not authenticated" });
+		res
+			.status(401)
+			.json({ authenticated: false, error: "User not authenticated" });
 	}
 });
 
