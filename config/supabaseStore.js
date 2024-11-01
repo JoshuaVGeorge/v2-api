@@ -76,9 +76,9 @@ class SupabaseStore extends session.Store {
 
 	async destroy(sessionId, callback) {
 		try {
-			console.log(
-				`Attempting to destroy session data for sessionId: ${sessionId}`
-			);
+			// console.log(
+			// 	`Attempting to destroy session data for sessionId: ${sessionId}`
+			// );
 			const { error } = await supabase
 				.from("session_information")
 				.delete()
@@ -92,9 +92,9 @@ class SupabaseStore extends session.Store {
 				return callback(error);
 			}
 
-			console.log(
-				`Successfully destroyed session data for sessionId: ${sessionId}`
-			);
+			// console.log(
+			// 	`Successfully destroyed session data for sessionId: ${sessionId}`
+			// );
 			callback(null);
 		} catch (err) {
 			console.error(
