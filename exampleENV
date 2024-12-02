@@ -1,0 +1,7 @@
+PORT = 5000
+CLIENT_ID = google cloud client ID
+CLIENT_SECRET = google cloud client secret
+RE_URI = http://localhost:5000/auth/google/callback
+S_KEY = uuidv4
+MAPS_API_KEY = distance matrix api key
+CAL_ID = your googl calendar id. Default leave as "primary"
