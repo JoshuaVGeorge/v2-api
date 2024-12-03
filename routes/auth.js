@@ -6,17 +6,16 @@ const router = express.Router();
 
 router.get(
 	"/google",
-	// passport.authenticate("google", {
-	// 	scope: [
-	// 		"profile",
-	// 		"email",
-	// 		"openid",
-	// 		"https://www.googleapis.com/auth/calendar.events",
-	// 	],
-	// 	accessType: "offline",
-	// 	prompt: "consent",
-	// })
-	(req, res) => [res.send("google auth")]
+	passport.authenticate("google", {
+		scope: [
+			"profile",
+			"email",
+			"openid",
+			"https://www.googleapis.com/auth/calendar.events",
+		],
+		accessType: "offline",
+		prompt: "consent",
+	})
 );
 
 router.get(
