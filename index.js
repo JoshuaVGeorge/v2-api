@@ -57,15 +57,48 @@ app.get("/", (req, res) => {
 	res.send("Backend is running");
 });
 
-app.get("/user", (req, res) => {
-	console.log("Cookies from request:", req.cookies);
-	if (req.isAuthenticated()) {
-		res.json({ authenticated: true, user: req.user });
-	} else {
-		res
-			.status(401)
-			.json({ authenticated: false, error: "User not authenticated" });
+app.get("/user", async (req, res) => {
+	try {
+		const sessionId = req.sessionID;
+
+		// Fetch session from Supabase if needed
+		const { data: session, error } = await supabase
+			.from("session_information")
+			.select("*")
+			.eq("session_id", sessionId)
+			.single();
+
+		if (error || !session) {
+			return res
+				.status(401)
+				.json({ authenticated: false, error: "No session found" });
+		}
+
+		// Set cookie for authenticated user
+		res.setHeader(
+			"Set-Cookie",
+			`sessionId=${sessionId}; Path=/; HttpOnly; Secure; SameSite=None`
+		);
+
+		res.json({ authenticated: true, user: session });
+	} catch (error) {
+		console.error("Error fetching session:", error);
+		res.status(500).json({ error: "Internal server error" });
 	}
+
+	// console.log("Cookies from request:", req.cookies);
+	// if (req.isAuthenticated()) {
+	// 	res.setHeader(
+	// 		"Set-Cookie",
+	// 		`sessionId=${req.sessionID}; Path=/; HttpOnly; Secure; SameSite=None`
+	// 	);
+
+	// 	res.json({ authenticated: true, user: req.user });
+	// } else {
+	// 	res
+	// 		.status(401)
+	// 		.json({ authenticated: false, error: "User not authenticated" });
+	// }
 });
 
 const PORT = process.env.PORT || 5000;
