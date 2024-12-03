@@ -23,6 +23,12 @@ router.get(
 	passport.authenticate("google", { failureRedirect: "/" }),
 	(req, res) => {
 		console.log("Session after login:", JSON.stringify(req.session, null, 2));
+
+		res.setHeader(
+			"Set-Cookie",
+			`sessionId=${req.sessionID}; Path=/; HttpOnly; Secure; SameSite=None`
+		);
+
 		res.redirect("http://localhost:3000");
 	}
 );

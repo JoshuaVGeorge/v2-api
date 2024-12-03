@@ -61,13 +61,12 @@ class SupabaseStore extends session.Store {
 				{ onConflict: "session_id" }
 			);
 
-			console.log("Cookie Sent to Frontend:", sessionData);
-
 			if (error) {
 				console.error("Error saving session data to Supabase:", error);
 				return callback(error);
 			}
 
+			console.log("Session stored successfully:", sessionData);
 			// console.log("Session data successfully saved to Supabase");
 			callback(null);
 		} catch (err) {
