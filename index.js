@@ -39,6 +39,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+	console.log("Incoming Request Headers:", req.headers);
+	next();
+});
+
 // Define routes
 app.use("/auth", authRoutes);
 app.use("/calendar", calendarRoutes);
@@ -53,7 +58,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-	console.log(req.cookies);
+	console.log("Cookies from request:", req.cookies);
 	if (req.isAuthenticated()) {
 		res.json({ authenticated: true, user: req.user });
 	} else {
