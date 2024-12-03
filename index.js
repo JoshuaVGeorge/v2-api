@@ -43,6 +43,10 @@ app.use("/auth", authRoutes);
 app.use("/calendar", calendarRoutes);
 app.use("/notifications", notificationRoutes);
 
+app.get("/test", (req, res) => {
+	res.send("test running");
+});
+
 app.get("/", (req, res) => {
 	res.send("Backend is running");
 });
