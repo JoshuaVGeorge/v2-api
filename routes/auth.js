@@ -5,17 +5,18 @@ const dbController = require("../controller/dbController");
 const router = express.Router();
 
 router.get(
-	"/google",
-	passport.authenticate("google", {
-		scope: [
-			"profile",
-			"email",
-			"openid",
-			"https://www.googleapis.com/auth/calendar.events",
-		],
-		accessType: "offline",
-		prompt: "consent",
-	})
+	// "/google",
+	// passport.authenticate("google", {
+	// 	scope: [
+	// 		"profile",
+	// 		"email",
+	// 		"openid",
+	// 		"https://www.googleapis.com/auth/calendar.events",
+	// 	],
+	// 	accessType: "offline",
+	// 	prompt: "consent",
+	// })
+	res.send("auth google")
 );
 
 router.get(
