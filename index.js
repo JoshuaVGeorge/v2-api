@@ -28,8 +28,9 @@ app.use(
 		rolling: true,
 		cookie: {
 			httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-			secure: process.env.NODE_ENV === "production", // Use true in production (requires HTTPS)
+			secure: true,
 			maxAge: 24 * 60 * 60 * 1000, // 1-day expiration
+			sameSite: "None",
 		},
 	})
 );
