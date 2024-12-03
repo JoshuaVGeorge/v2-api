@@ -28,7 +28,6 @@ router.get(
 );
 
 router.get("/logout", (req, res) => {
-	// Use Passport's built-in logout method
 	req.logout((err) => {
 		if (err) {
 			console.error("Error during logout:", err);
