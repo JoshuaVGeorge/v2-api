@@ -5,7 +5,7 @@ const dbController = require("../controller/dbController");
 const router = express.Router();
 
 router.get(
-	// "/google",
+	"/google",
 	// passport.authenticate("google", {
 	// 	scope: [
 	// 		"profile",
@@ -16,7 +16,7 @@ router.get(
 	// 	accessType: "offline",
 	// 	prompt: "consent",
 	// })
-	res.send("auth google")
+	(req, res) => [res.send("google auth")]
 );
 
 router.get(
