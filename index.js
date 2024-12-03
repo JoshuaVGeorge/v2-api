@@ -53,7 +53,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-	console.log(req);
+	console.log(req.cookies);
 	if (req.isAuthenticated()) {
 		res.json({ authenticated: true, user: req.user });
 	} else {
