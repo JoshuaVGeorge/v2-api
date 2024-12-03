@@ -28,7 +28,7 @@ app.use(
 		rolling: true,
 		cookie: {
 			httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-			secure: true,
+			secure: false,
 			maxAge: 24 * 60 * 60 * 1000, // 1-day expiration
 			sameSite: "None",
 		},
